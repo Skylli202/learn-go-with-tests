@@ -14,8 +14,21 @@ func secondsInRadians(t time.Time) float64 {
 	return (math.Pi / (30 / (float64(t.Second()))))
 }
 
+func minutesInRadians(t time.Time) float64 {
+	return (secondsInRadians(t) / 60) + (math.Pi / (30 / float64(t.Minute())))
+}
+
 func secondHandPoint(t time.Time) Point {
 	a := secondsInRadians(t)
+
+	x := math.Sin(a)
+	y := math.Cos(a)
+
+	return Point{x, y}
+}
+
+func minuteHandPoint(t time.Time) Point {
+	a := minutesInRadians(t)
 
 	x := math.Sin(a)
 	y := math.Cos(a)
