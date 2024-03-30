@@ -1,21 +1,12 @@
 package arrays
 
 func Sum(numbers []int) int {
-	sum := 0
-
-	for _, number := range numbers {
-		sum += number
-	}
-
-	return sum
+	return Reduce(numbers, func(acc, x int) int { return acc + x }, 0)
 }
 
 func SumAll(numbersToSum ...[]int) []int {
 	res := []int{}
-	for _, numbers := range numbersToSum {
-		res = append(res, Sum(numbers))
-	}
-	return res
+	return Reduce(numbersToSum, func(acc, x []int) []int { return append(acc, Sum(x)) }, res)
 }
 
 func SumAllTails(numbersToSum ...[]int) []int {
@@ -30,4 +21,12 @@ func SumAllTails(numbersToSum ...[]int) []int {
 	}
 
 	return sums
+}
+
+func Reduce[A any](collection []A, accumulator func(A, A) A, initialValue A) A {
+	result := initialValue
+	for _, x := range collection {
+		result = accumulator(result, x)
+	}
+	return result
 }
