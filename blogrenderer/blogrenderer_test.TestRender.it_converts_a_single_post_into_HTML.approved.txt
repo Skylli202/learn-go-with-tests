@@ -23,6 +23,15 @@
 
 <p>This is a description</p>
 
+<h1 id="this-is-a-title-1">this is a title 1</h1>
+
+<h2 id="this-is-a-title-2">this is a title 2</h2>
+
+<h3 id="this-is-a-title-3">this is a title 3</h3>
+
+<p>This is a body</p>
+
+
 Tags: <ul><li>go</li><li>tdd</li></ul>
 
 </main>
