@@ -9,6 +9,6 @@ type Post struct {
 	Tags                     []string
 }
 
-func (p Post) SanitiseTitle() string {
+func (p Post) SanitisedTitle() string {
 	return strings.ToLower(strings.ReplaceAll(p.Title, " ", "-"))
 }
