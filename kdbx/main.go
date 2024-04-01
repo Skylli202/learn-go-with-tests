@@ -27,10 +27,8 @@ Format version: %d.%d
 
 	headers := kdbx.ReadHeaders()
 	for i, header := range headers {
-		fmt.Printf(`[%d]:
-  ID: %d,
-  Length: %d,
-  Value: %X
+		fmt.Printf(`[%d] ID: %d, Length: %d,
+    Value: %X
 `, i, header.ID, header.Length, header.Value)
 	}
 }
