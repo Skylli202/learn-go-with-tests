@@ -23,10 +23,20 @@ func SumAllTails(numbersToSum ...[]int) []int {
 	return sums
 }
 
-func Reduce[A any](collection []A, accumulator func(A, A) A, initialValue A) A {
+func Reduce[A, B any](collection []A, accumulator func(B, A) B, initialValue B) B {
 	result := initialValue
 	for _, x := range collection {
 		result = accumulator(result, x)
 	}
 	return result
+}
+
+func Find[A any](collection []A, predicate func(A) bool) (value A, found bool) {
+	for _, item := range collection {
+		if predicate(item) {
+			return item, true
+		}
+	}
+
+	return
 }
