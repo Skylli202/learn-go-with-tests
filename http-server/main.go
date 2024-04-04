@@ -1,4 +1,4 @@
-package httpserver
+package main
 
 import (
 	"log"
@@ -7,15 +7,7 @@ import (
 	httpserver "github.com/Skylli202/learn-go-with-tests/http-server/http-server"
 )
 
-type InMemoryPlayerStore struct{}
-
-func (i *InMemoryPlayerStore) GetPlayerScore(name string) int {
-	return 123
-}
-
-func (i *InMemoryPlayerStore) RecordWin(name string) {}
-
 func main() {
-	server := &httpserver.PlayerServer{Store: &InMemoryPlayerStore{}}
+	server := &httpserver.PlayerServer{Store: httpserver.NewInMemoryPlayerStore()}
 	log.Fatal(http.ListenAndServe(":5000", server))
 }
