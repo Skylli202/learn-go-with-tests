@@ -1,19 +1,11 @@
 package httpserver
 
-type InMemoryPlayerStore struct {
-	store map[string]int
-}
-
 func NewInMemoryPlayerStore() *InMemoryPlayerStore {
 	return &InMemoryPlayerStore{map[string]int{}}
 }
 
-func (i *InMemoryPlayerStore) RecordWin(name string) {
-	i.store[name] += 1
-}
-
-func (i *InMemoryPlayerStore) GetPlayerScore(name string) int {
-	return i.store[name]
+type InMemoryPlayerStore struct {
+	store map[string]int
 }
 
 func (i *InMemoryPlayerStore) GetLeague() []Player {
@@ -22,4 +14,12 @@ func (i *InMemoryPlayerStore) GetLeague() []Player {
 		league = append(league, Player{name, wins})
 	}
 	return league
+}
+
+func (i *InMemoryPlayerStore) RecordWin(name string) {
+	i.store[name] += 1
+}
+
+func (i *InMemoryPlayerStore) GetPlayerScore(name string) int {
+	return i.store[name]
 }
