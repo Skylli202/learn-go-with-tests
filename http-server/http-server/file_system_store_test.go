@@ -15,7 +15,7 @@ func TestFileSystemStore(t *testing.T) {
 			{"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
 
-		store := httpserver.FileSystemStore{database}
+		store := httpserver.FileSystemPlayerStore{database}
 
 		got := store.GetLeague()
 
@@ -36,7 +36,7 @@ func TestFileSystemStore(t *testing.T) {
 			{"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
 
-		store := httpserver.FileSystemStore{database}
+		store := httpserver.FileSystemPlayerStore{database}
 
 		got := store.GetPlayerScore("Chris")
 		want := 33
@@ -50,13 +50,27 @@ func TestFileSystemStore(t *testing.T) {
 			{"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
 
-		store := httpserver.FileSystemStore{database}
+		store := httpserver.FileSystemPlayerStore{database}
 
 		store.RecordWin("Chris")
 
 		got := store.GetPlayerScore("Chris")
 		want := 34
 
+		assertScoreEquals(t, got, want)
+	})
+
+	t.Run("store wins for new players", func(t *testing.T) {
+		database, cleanDatabase := createTempFile(t, `[
+			{"Name": "Cleo", "Wins": 10},
+			{"Name": "Chris", "Wins": 33}]`)
+		defer cleanDatabase()
+
+		store := httpserver.FileSystemPlayerStore{database}
+
+		store.RecordWin("Anakin")
+		got := store.GetPlayerScore("Anakin")
+		want := 1
 		assertScoreEquals(t, got, want)
 	})
 }
