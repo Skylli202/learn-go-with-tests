@@ -1,6 +1,7 @@
 package httpserver
 
 import (
+	"encoding/json"
 	"io"
 )
 
@@ -24,4 +25,15 @@ func (f *FileSystemStore) GetPlayerScore(name string) int {
 		}
 	}
 	return wins
+}
+
+func (f *FileSystemStore) RecordWin(name string) {
+	league := f.GetLeague()
+	for i, player := range league {
+		if player.Name == name {
+			league[i].Wins += 1
+		}
+	}
+	f.Database.Seek(0, io.SeekStart)
+	json.NewEncoder(f.Database).Encode(league)
 }
