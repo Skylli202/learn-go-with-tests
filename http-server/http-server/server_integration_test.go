@@ -10,7 +10,9 @@ import (
 
 // server_integration_test.go
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
-	store := httpserver.NewInMemoryPlayerStore()
+	database, cleanDatabase := createTempFile(t, "")
+	defer cleanDatabase()
+	store := &httpserver.FileSystemPlayerStore{database}
 	server := httpserver.NewPlayerServer(store)
 	player := "Pepper"
 
