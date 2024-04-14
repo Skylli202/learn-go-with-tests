@@ -26,7 +26,7 @@ type PlayerServer struct {
 	http.Handler
 }
 
-const jsonContentType = "application/json"
+const JsonContentType = "application/json"
 
 // NewPlayerServer creates a PlayerServer with routing configured.
 func NewPlayerServer(store PlayerStore) *PlayerServer {
