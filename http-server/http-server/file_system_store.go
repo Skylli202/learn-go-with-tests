@@ -2,22 +2,38 @@ package httpserver
 
 import (
 	"encoding/json"
+	"fmt"
 	"io"
+	"os"
 )
 
 type FileSystemPlayerStore struct {
-	Database io.ReadWriteSeeker
+	Database *json.Encoder
 	League   League
 }
 
-func NewFileSystemPlayerStore(database io.ReadWriteSeeker) *FileSystemPlayerStore {
-	database.Seek(0, io.SeekStart)
-	league, _ := NewLeague(database)
+func NewFileSystemPlayerStore(file *os.File) (*FileSystemPlayerStore, error) {
+	file.Seek(0, io.SeekStart)
+
+	info, err := file.Stat()
+	if err != nil {
+		return nil, fmt.Errorf("problem getting file info from file %s, %v", file.Name(), err)
+	}
+
+	if info.Size() == 0 {
+		file.Write([]byte("[]"))
+		file.Seek(0, io.SeekStart)
+	}
+
+	league, err := NewLeague(file)
+	if err != nil {
+		return nil, fmt.Errorf("problem loading player store from file %s, %v", file.Name(), err)
+	}
 
 	return &FileSystemPlayerStore{
-		Database: database,
+		Database: json.NewEncoder(&Tape{file}),
 		League:   league,
-	}
+	}, nil
 }
 
 func (f *FileSystemPlayerStore) GetLeague() League {
@@ -43,6 +59,5 @@ func (f *FileSystemPlayerStore) RecordWin(name string) {
 		f.League = append(f.League, Player{Name: name, Wins: 1})
 	}
 
-	f.Database.Seek(0, io.SeekStart)
-	json.NewEncoder(f.Database).Encode(f.League)
+	f.Database.Encode(f.League)
 }

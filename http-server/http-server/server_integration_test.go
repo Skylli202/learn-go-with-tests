@@ -10,9 +10,10 @@ import (
 
 // server_integration_test.go
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
-	database, cleanDatabase := createTempFile(t, "")
+	database, cleanDatabase := createTempFile(t, `[]`)
 	defer cleanDatabase()
-	store := httpserver.NewFileSystemPlayerStore(database)
+	store, err := httpserver.NewFileSystemPlayerStore(database)
+	assertNoError(t, err)
 	server := httpserver.NewPlayerServer(store)
 	player := "Pepper"
 

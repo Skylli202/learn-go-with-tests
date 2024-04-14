@@ -1,7 +1,6 @@
 package httpserver_test
 
 import (
-	"io"
 	"os"
 	"testing"
 
@@ -15,7 +14,8 @@ func TestFileSystemStore(t *testing.T) {
 			{"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
 
-		store := httpserver.NewFileSystemPlayerStore(database)
+		store, err := httpserver.NewFileSystemPlayerStore(database)
+		assertNoError(t, err)
 
 		got := store.GetLeague()
 
@@ -36,7 +36,8 @@ func TestFileSystemStore(t *testing.T) {
 			{"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
 
-		store := httpserver.NewFileSystemPlayerStore(database)
+		store, err := httpserver.NewFileSystemPlayerStore(database)
+		assertNoError(t, err)
 
 		got := store.GetPlayerScore("Chris")
 		want := 33
@@ -50,7 +51,8 @@ func TestFileSystemStore(t *testing.T) {
 			{"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
 
-		store := httpserver.NewFileSystemPlayerStore(database)
+		store, err := httpserver.NewFileSystemPlayerStore(database)
+		assertNoError(t, err)
 
 		store.RecordWin("Chris")
 
@@ -66,12 +68,22 @@ func TestFileSystemStore(t *testing.T) {
 			{"Name": "Chris", "Wins": 33}]`)
 		defer cleanDatabase()
 
-		store := httpserver.NewFileSystemPlayerStore(database)
+		store, err := httpserver.NewFileSystemPlayerStore(database)
+		assertNoError(t, err)
 
 		store.RecordWin("Anakin")
 		got := store.GetPlayerScore("Anakin")
 		want := 1
 		assertScoreEquals(t, got, want)
+	})
+
+	t.Run("works with an empty file", func(t *testing.T) {
+		database, cleanDatabase := createTempFile(t, "")
+		defer cleanDatabase()
+
+		_, err := httpserver.NewFileSystemPlayerStore(database)
+
+		assertNoError(t, err)
 	})
 }
 
@@ -83,7 +95,7 @@ func assertScoreEquals(t testing.TB, got, want int) {
 	}
 }
 
-func createTempFile(t testing.TB, initialData string) (io.ReadWriteSeeker, func()) {
+func createTempFile(t testing.TB, initialData string) (*os.File, func()) {
 	t.Helper()
 
 	tmpFile, err := os.CreateTemp("", "db")
@@ -99,4 +111,11 @@ func createTempFile(t testing.TB, initialData string) (io.ReadWriteSeeker, func(
 	}
 
 	return tmpFile, removeFile
+}
+
+func assertNoError(t testing.TB, err error) {
+	t.Helper()
+	if err != nil {
+		t.Fatalf("did not expect an error but one one, %v", err)
+	}
 }
