@@ -4,16 +4,19 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	poker "github.com/Skylli202/learn-go-with-tests/command-line"
 )
 
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	database, cleanDatabase := createTempFile(t, `[]`)
 	defer cleanDatabase()
-	store, err := NewFileSystemPlayerStore(database)
+
+	store, err := poker.NewFileSystemPlayerStore(database)
 
 	assertNoError(t, err)
 
-	server := NewPlayerServer(store)
+	server := poker.NewPlayerServer(store)
 	player := "Pepper"
 
 	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
@@ -23,20 +26,20 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	t.Run("get score", func(t *testing.T) {
 		response := httptest.NewRecorder()
 		server.ServeHTTP(response, newGetScoreRequest(player))
-		assertStatus(t, response.Code, http.StatusOK)
+		poker.AssertStatus(t, response.Code, http.StatusOK)
 
-		assertResponseBody(t, response.Body.String(), "3")
+		poker.AssertResponseBody(t, response.Body.String(), "3")
 	})
 
 	t.Run("get league", func(t *testing.T) {
 		response := httptest.NewRecorder()
 		server.ServeHTTP(response, newLeagueRequest())
-		assertStatus(t, response.Code, http.StatusOK)
+		poker.AssertStatus(t, response.Code, http.StatusOK)
 
 		got := getLeagueFromResponse(t, response.Body)
-		want := []Player{
+		want := poker.League{
 			{"Pepper", 3},
 		}
-		assertLeague(t, got, want)
+		poker.AssertLeague(t, got, want)
 	})
 }
