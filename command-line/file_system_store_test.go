@@ -9,7 +9,6 @@ func createTempFile(t testing.TB, initialData string) (*os.File, func()) {
 	t.Helper()
 
 	tmpfile, err := os.CreateTemp("", "db")
-
 	if err != nil {
 		t.Fatalf("could not create temp file %v", err)
 	}
@@ -25,7 +24,6 @@ func createTempFile(t testing.TB, initialData string) (*os.File, func()) {
 }
 
 func TestFileSystemStore(t *testing.T) {
-
 	t.Run("league sorted", func(t *testing.T) {
 		database, cleanDatabase := createTempFile(t, `[
 			{"Name": "Cleo", "Wins": 10},
