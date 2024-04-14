@@ -74,6 +74,7 @@ func TestStoreWins(t *testing.T) {
 	store := StubPlayerStore{
 		scores:   map[string]int{},
 		winCalls: nil,
+		league:   nil,
 	}
 	server := httpserver.NewPlayerServer(&store)
 
