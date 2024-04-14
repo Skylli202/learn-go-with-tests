@@ -21,7 +21,7 @@ func main() {
 		log.Fatalf("problem creating file system player store %v", err)
 	}
 
-	server := &httpserver.PlayerServer{Store: store}
+	server := httpserver.NewPlayerServer(store)
 
 	if err := http.ListenAndServe(":5000", server); err != nil {
 		log.Fatalf("could not listen on port 5000 %v", err)
