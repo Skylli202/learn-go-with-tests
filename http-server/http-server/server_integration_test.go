@@ -12,7 +12,7 @@ import (
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	database, cleanDatabase := createTempFile(t, "")
 	defer cleanDatabase()
-	store := &httpserver.FileSystemPlayerStore{database}
+	store := httpserver.NewFileSystemPlayerStore(database)
 	server := httpserver.NewPlayerServer(store)
 	player := "Pepper"
 
