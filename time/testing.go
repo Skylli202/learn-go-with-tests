@@ -1,31 +1,30 @@
 package poker
 
-import "testing"
+import (
+	"net/http/httptest"
+	"reflect"
+	"testing"
+)
 
-// StubPlayerStore implements PlayerStore for testing purposes.
 type StubPlayerStore struct {
 	Scores   map[string]int
 	WinCalls []string
 	League   []Player
 }
 
-// GetPlayerScore returns a score from Scores.
 func (s *StubPlayerStore) GetPlayerScore(name string) int {
 	score := s.Scores[name]
 	return score
 }
 
-// RecordWin will record a win to WinCalls.
 func (s *StubPlayerStore) RecordWin(name string) {
 	s.WinCalls = append(s.WinCalls, name)
 }
 
-// GetLeague returns League.
 func (s *StubPlayerStore) GetLeague() League {
 	return s.League
 }
 
-// AssertPlayerWin allows you to spy on the store's calls to RecordWin.
 func AssertPlayerWin(t testing.TB, store *StubPlayerStore, winner string) {
 	t.Helper()
 
@@ -35,5 +34,34 @@ func AssertPlayerWin(t testing.TB, store *StubPlayerStore, winner string) {
 
 	if store.WinCalls[0] != winner {
 		t.Errorf("did not store correct winner got %q want %q", store.WinCalls[0], winner)
+	}
+}
+
+// todo for you - the rest of the helpers
+func AssertLeague(t testing.TB, got, want League) {
+	t.Helper()
+	if !reflect.DeepEqual(got, want) {
+		t.Errorf("got %v want %v", got, want)
+	}
+}
+
+func AssertStatus(t testing.TB, got, want int) {
+	t.Helper()
+	if got != want {
+		t.Errorf("did not get correct status, got %d, want %d", got, want)
+	}
+}
+
+func AssertContentType(t testing.TB, response *httptest.ResponseRecorder, want string) {
+	t.Helper()
+	if response.Header().Get("content-type") != want {
+		t.Errorf("response did not have content-type of %s, got %v", want, response.Result().Header)
+	}
+}
+
+func AssertResponseBody(t testing.TB, got, want string) {
+	t.Helper()
+	if got != want {
+		t.Errorf("response body is wrong, got %q want %q", got, want)
 	}
 }
