@@ -2,11 +2,12 @@ package poker_test
 
 import (
 	"fmt"
-	"github.com/quii/learn-go-with-tests/time/v1"
 	"io"
 	"strings"
 	"testing"
 	"time"
+
+	poker "github.com/Skylli202/learn-go-with-tests/time"
 )
 
 type scheduledAlert struct {
@@ -29,7 +30,6 @@ func (s *SpyBlindAlerter) ScheduleAlertAt(at time.Duration, amount int) {
 var dummySpyAlerter = &SpyBlindAlerter{}
 
 func TestCLI(t *testing.T) {
-
 	t.Run("it schedules printing of blind values", func(t *testing.T) {
 		in := strings.NewReader("Chris wins\n")
 		playerStore := &poker.StubPlayerStore{}
@@ -54,7 +54,6 @@ func TestCLI(t *testing.T) {
 
 		for i, want := range cases {
 			t.Run(fmt.Sprint(want), func(t *testing.T) {
-
 				if len(blindAlerter.alerts) <= i {
 					t.Fatalf("alert %d was not scheduled %v", i, blindAlerter.alerts)
 				}
@@ -96,7 +95,6 @@ func TestCLI(t *testing.T) {
 		cli := poker.NewCLI(playerStore, in, dummySpyAlerter)
 		cli.PlayPoker()
 	})
-
 }
 
 type failOnEndReader struct {
@@ -105,7 +103,6 @@ type failOnEndReader struct {
 }
 
 func (m failOnEndReader) Read(p []byte) (n int, err error) {
-
 	n, err = m.rdr.Read(p)
 
 	if n == 0 || err == io.EOF {
