@@ -4,7 +4,7 @@ import (
 	"log"
 	"net/http"
 
-	poker "github.com/Skylli202/learn-go-with-tests/command-line"
+	poker "github.com/Skylli202/learn-go-with-tests/time"
 )
 
 const dbFileName = "game.db.json"

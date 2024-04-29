@@ -5,7 +5,7 @@ import (
 	"net/http/httptest"
 	"testing"
 
-	poker "github.com/Skylli202/learn-go-with-tests/command-line"
+	poker "github.com/Skylli202/learn-go-with-tests/time"
 )
 
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
