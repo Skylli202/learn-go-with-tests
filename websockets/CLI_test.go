@@ -6,13 +6,15 @@ import (
 	"strings"
 	"testing"
 
-	poker "github.com/quii/learn-go-with-tests/time/v3"
+	poker "github.com/Skylli202/learn-go-with-tests/websockets"
 )
 
-var dummyBlindAlerter = &poker.SpyBlindAlerter{}
-var dummyPlayerStore = &poker.StubPlayerStore{}
-var dummyStdIn = &bytes.Buffer{}
-var dummyStdOut = &bytes.Buffer{}
+var (
+	dummyBlindAlerter = &poker.SpyBlindAlerter{}
+	dummyPlayerStore  = &poker.StubPlayerStore{}
+	dummyStdIn        = &bytes.Buffer{}
+	dummyStdOut       = &bytes.Buffer{}
+)
 
 type GameSpy struct {
 	StartCalled     bool
@@ -37,7 +39,6 @@ func userSends(messages ...string) io.Reader {
 }
 
 func TestCLI(t *testing.T) {
-
 	t.Run("start game with 3 players and finish game with 'Chris' as winner", func(t *testing.T) {
 		game := &GameSpy{}
 		stdout := &bytes.Buffer{}

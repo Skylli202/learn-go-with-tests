@@ -2,9 +2,10 @@ package poker_test
 
 import (
 	"fmt"
-	"github.com/quii/learn-go-with-tests/time/v3"
 	"testing"
 	"time"
+
+	poker "github.com/Skylli202/learn-go-with-tests/websockets"
 )
 
 func TestGame_Start(t *testing.T) {
@@ -46,7 +47,6 @@ func TestGame_Start(t *testing.T) {
 
 		checkSchedulingCases(cases, t, blindAlerter)
 	})
-
 }
 
 func TestGame_Finish(t *testing.T) {
@@ -61,7 +61,6 @@ func TestGame_Finish(t *testing.T) {
 func checkSchedulingCases(cases []poker.ScheduledAlert, t *testing.T, blindAlerter *poker.SpyBlindAlerter) {
 	for i, want := range cases {
 		t.Run(fmt.Sprint(want), func(t *testing.T) {
-
 			if len(blindAlerter.Alerts) <= i {
 				t.Fatalf("alert %d was not scheduled %v", i, blindAlerter.Alerts)
 			}
