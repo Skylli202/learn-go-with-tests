@@ -21,7 +21,7 @@ func main() {
 		log.Fatalf("problem creating file system player store, %v ", err)
 	}
 
-	server := poker.NewPlayerServer(store)
+	server, _ := poker.NewPlayerServer(store)
 
 	log.Fatal(http.ListenAndServe(":5000", server))
 }
